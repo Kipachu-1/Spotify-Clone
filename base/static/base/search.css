@@ -1,0 +1,53 @@
+.section_search_playlist_block {
+    grid-template-columns: repeat(6, minmax(155px, 212px));
+    grid-template-rows: repeat(1, 240px);
+}
+.search_playlist_block {
+    max-width: 180px;
+}
+.search-bar {
+    width: 100%;
+    height: 50px;
+    background-color: rgb(109, 109, 109);
+    display: none;
+}
+@media only screen and (min-device-width: 700px) {
+    .search-bar {
+        display: none;
+    }
+}
+@media only screen and (max-device-width: 700px) {
+#root_top_bar {
+    display: none;
+}
+}
+
+
+.list-types {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 5px;
+    padding: 0 10px;
+    overflow-x: auto;
+}
+.type-btn {
+    color: black;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    height: 34px;
+    background-color: rgb(255, 255, 255);
+
+    padding: 0 6px;
+}
+.type-btn > p {
+    font-weight: 600;
+}
+.songs_list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}

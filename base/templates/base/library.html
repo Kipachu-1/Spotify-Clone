@@ -1,0 +1,29 @@
+{% extends 'base/home.html' %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+{% endblock head %}
+
+
+{% block content %}
+<div class='container_block container_block_collection'>
+    <div class='block_name'><p>Playlists</p></div>
+    <div class='section_block  section_block_library'>
+        {% for playlist in playlists %}
+        <div class="name_playlist_block">
+            <div class='block_info'>
+                <div class='img_container_block_other'>
+                    <img src="{{playlist.thumnail.url}}" class='img_container_block_other' alt="">
+                    <div class='other_block_btn' data-id="{{playlist.uni_id}}">
+                        <i class="fa fa-play-circle fa-5x playbtn_block_icon"></i>
+                    </div>
+                </div>
+                <div class='bla_bla'>
+                     <p class='bla_bla_p'>{{playlist.name}}</p>
+                </div>
+            </div>
+        </div> 
+        {% endfor %}     
+    </div>
+</div>
+{% endblock content %}

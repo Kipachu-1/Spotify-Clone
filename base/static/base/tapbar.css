@@ -1,0 +1,47 @@
+.tapbar {
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+.links {
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.linkbtn {
+    width: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.link_img_container {
+    width: 24px;
+    height: 24px;
+    /* filter: invert(87%) sepia(3%) saturate(10%) hue-rotate(339deg) brightness(89%) contrast(85%); */
+    filter: invert(33%) sepia(82%) saturate(2455%) hue-rotate(239deg) brightness(102%) contrast(102%);
+}
+.link_text_container > p {
+    margin: 0;
+    text-align: center;
+    color: #BBBBBB;
+    font-size: 14px;
+}
+
+
+
+
+
+
+@media only screen and (min-device-width: 700px) {
+    .tapbar {
+        display: none;
+        visibility: collapse;
+    }
+}

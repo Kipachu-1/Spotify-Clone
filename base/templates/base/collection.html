@@ -1,0 +1,71 @@
+{% extends 'base/home.html' %}
+{% block head %}
+{% load static %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'base/collection.css' %}">
+{% endblock head %}
+
+
+{% block content %}
+<div id='playlist_info'>
+    <div id='info_container'>
+        <div id='playlist_img'>
+            <img src="{{data.thumnail.url}}" alt="">
+        </div>
+        <div id='playlist_info_block'>
+            <p id='playlist_info_type'>{{type}}</p>
+            <h1 id='playlist_info_name'>{{data.name}}</h1>
+            <p id='playlist_info_authors'></p>
+            <p id='playlist_author_length'>{{data.creator }}*{{music_count}} songs</p>
+        </div>
+    </div>
+</div>
+<div id='act_area'>
+    <div id='btn_list'>
+        <div class='act_btn_playlist' id="playbtn" data-id='{{data.uni_id}}'>
+            <i class="fa fa-play-circle fa-5x collection_btn"></i>
+        </div>
+        <div class='act_btn_playlist' id="likedbtn">
+            <img src="{% static 'base/icons/heart.svg' %}" alt="">
+        </div>
+        <div class='act_btn_playlist' id="editbtn">
+            <img src="{% static 'base/icons/dots.svg' %}" alt="">
+        </div>
+    </div>
+</div>
+{% if type == 'SONG' %}
+<div id='author_block'>
+    <div id='author_img'>
+        
+    </div>
+    <div id='auhtor_info'>
+        <div>
+            <p>ARTIST</p>
+            <p id='author_name'>{{data.author.name}}</p>
+         </div>
+    </div>
+</div>
+{% endif %}
+{% if type != 'SONG'%}
+<div id='musics_list'>
+    {% for music in music_list %}
+    <div class='music_block'>
+        <div class='musindex'>
+            <p class='musindexnum'>#</p>
+            <div class='playmusbtn' data-id="{{music.uni_id}}">
+                <img src="{% static 'base/icons/play-trian.svg' %}" class='playmusbtn_img' alt="">
+            </div>
+        </div>
+        <div class='thumnail'>
+            <img src="{{music.thumnail.url}}" alt="">
+        </div>
+        <div class='music_info'>
+            <p class='music_name'>{{music.name}}</p>
+            <p class='music_author'>{{music.author.name}}</p>
+        </div>
+    </div>
+    {% endfor %}
+    
+</div>
+{% endif %}
+{% endblock content %}

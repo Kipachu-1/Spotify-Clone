@@ -1,0 +1,34 @@
+{% extends 'base/home.html' %}
+
+{% block content %}
+<div class='search-bar'>
+
+</div>
+<div class='list-types'>
+    <div class='type-btn'>
+        Songs
+    </div>
+    <div class='type-btn'>
+        Artists
+    </div>
+    <div class='type-btn'>
+        Playlists
+    </div>
+</div>
+<div class='search_list songs_list'> 
+    {% for song in songs %}
+    <div class='music_block'>
+        <div class='thumnail'>
+            <img src="{{song.thumnail.url}}" alt="">
+        </div>
+        <div class='music_info'>
+            <p class='music_name search_name'>Rich soul</p>
+            <p class='music_author search_author'>Siesta</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content %}
+

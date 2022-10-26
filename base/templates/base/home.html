@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    {% block head %}
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="viewport-fit=cover, user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="manifest" href="{% static 'base/js/manifest.json' %}">
+        <link rel="stylesheet" href="{% static 'base/home.css' %}">
+        <link rel="stylesheet" href="{% static 'base/player_bar.css' %}">
+        <link rel="stylesheet" href="{% static 'base/collection.css' %}">
+        <link rel="stylesheet" href="{% static 'base/library.css' %}">
+        <link rel="stylesheet" href="{% static 'base/tapbar.css' %}">
+        <link rel="stylesheet" href="{% static 'base/search.css' %}">
+        <link rel="stylesheet" href="{% static 'base/ReactModalPortal.css' %}">
+        <link rel="stylesheet" href="{% static 'base/editcontent.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    {% endblock head %}
+    <body>
+        
+        <div id='main'>
+            <div id='submain'>
+                <div id='root_top_bar'>
+                        <div class='root_top_bar_container'>
+                            <div class='home_page_link'>
+                                <img src="{% static 'base/icons/home.svg' %}" alt="">
+                            </div>
+                            <div id="search-bar">
+                            <img src="{% static 'base/icons/search.svg' %}" id='search_icon' alt="">
+                            <input type="text" name='q'  autocomplete="off" id='searchinput'>
+                            </div>
+                        </div>
+                    <div id='user_icon'></div>
+                </div>
+                <div id='main_container'>
+                    <div id='nav_bar' class='hidden-nav-bar'>
+                        <div id='act_btns'>
+                            <div class='act_btn' id='library_btn'>
+                                <div id='act_btn_img'><img src="{% static 'base/icons/library.svg' %}" alt=""></div><h1 class='act_btn_name'>Your Library</h1></div>
+                            <div class='act_btn' id='plus_btn'>
+                                <div id='act_btn_img'><img src="{% static 'base/icons/plus-square.svg' %}" alt=""></div><h1 class='act_btn_name'>Create Playlist</h1></div>
+                            <div class='act_btn' id='liked_btn'>
+                                <div id='act_btn_img'><img src="{% static 'base/icons/liked.png' %}" alt=""></div><h1 class='act_btn_name'>Liked Songs</h1></div>
+                            </div>
+                        <div id='playlist_list'>
+                            {% for playlist in playlists %}
+                            <div class='playlist_block' data-id='{{playlist.uni_id}}'>
+                                
+                                    <div class='subblock'>
+                                        <h1 class='playlist_name'>{{playlist.name}}</h1>
+                                    </div>
+                                
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                    <div id='view_container'>
+                        <div id='view_container_content'>
+                            {% block content %}
+                            <div class='container_block container_block_1'>
+                                <div class='block_name'><h1>Good Afternoon</h1></div>
+                                <div id='recently_played_playlists' class='section_block section_block_media'>
+                                    {% for playlist in playlists %}
+                                        <div class="played_playlist_block name_playlist_block" data-id={{playlist.uni_id}}>
+                                            <div class='img_container_block'>
+                                                <img src="{{playlist.thumnail.url}}" class='img_container_block' alt="">
+                                            </div>
+                                            <div class='playlist_name'><p>{{playlist.name}}</p></div>
+                                            <div class='playbtn_block' data-id="{{playlist.uni_id}}">
+                                                <i class="fa fa-play-circle fa-5x playbtn_block_icon" width='40px' height='40px'></i>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class='container_block'>
+                                <div class='block_name'><h1>Made For You</h1></div>
+                                <div id='suggested_played_playlists' class='section_block section_block_other'>
+                                    <div class="suggested_playlist_block name_playlist_block">
+                                        <div class='block_info'>
+                                            <div class='img_container_block_other'>
+                                                <img src="/media/images/photo_2022-08-24_01-12-05_lyHjP44.jpg" class='img_container_block_other' alt="">
+                                                <div class='other_block_btn' data-id="{{playlist.uni_id}}">
+                                                    <i class="fa fa-play-circle fa-5x playbtn_block_icon" width='40px' height='40px'></i>
+                                                </div>
+                                            </div>
+                                            <div class='bla_bla'>
+                                                 <p>bla_bla</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="suggested_playlist_block name_playlist_block">
+                                        <div class='block_info'>
+                                            <div class='img_container_block_other'>
+                                                <img src="/media/images/photo_2022-08-24_01-12-05_lyHjP44.jpg" class='img_container_block_other' alt="">
+                                            </div>
+                                            <div class='bla_bla'>
+                                                 <p>bla_bla</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="suggested_playlist_block name_playlist_block">
+                                        <div class='block_info'>
+                                            <div class='img_container_block_other'>
+                                                <img src="/media/images/photo_2022-08-24_01-12-05_lyHjP44.jpg" class='img_container_block_other' alt="">
+                                            </div>
+                                            <div class='bla_bla'>
+                                                 <p>bla_bla</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="suggested_playlist_block name_playlist_block">
+                                        <div class='block_info'>
+                                            <div class='img_container_block_other'>
+                                                <img src="/media/images/photo_2022-08-24_01-12-05_lyHjP44.jpg" class='img_container_block_other' alt="">
+                                            </div>
+                                            <div class='bla_bla'>
+                                                 <p>bla_bla</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="suggested_playlist_block name_playlist_block">
+                                        <div class='block_info'>
+                                            <div class='img_container_block_other'>
+                                                <img src="/media/images/photo_2022-08-24_01-12-05_lyHjP44.jpg" class='img_container_block_other' alt="">
+                                            </div>
+                                            <div class='bla_bla'>
+                                                 <p>bla_bla</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="suggested_playlist_block name_playlist_block">
+                                        <div class='block_info'>
+                                            <div class='img_container_block_other'>
+                                                <img src="/media/images/photo_2022-08-24_01-12-05_lyHjP44.jpg" class='img_container_block_other' alt="">
+                                            </div>
+                                            <div class='bla_bla'>
+                                                 <p>bla_bla</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class='container_block'>
+                                <div class='block_name'><h1>Based on recent listening</h1></div>
+                                <div id='based_played_playlists' class='section_block section_block_other'>
+                                    <div class="based_played_playlists name_playlist_block"></div>
+                                    <div class="based_played_playlists name_playlist_block"></div>
+                                    <div class="based_played_playlists name_playlist_block"></div>
+                                    <div class="based_played_playlists name_playlist_block"></div>
+                                    <div class="based_played_playlists name_playlist_block"></div>
+                                    <div class="based_played_playlists name_playlist_block"></div>
+                                </div>
+                            </div>
+                            {% endblock content %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id='player_bar'>
+                <div class="player">
+                    <div class="wrapper">
+                        <div class='play-pause-btn'>
+                            <i class="fa fa-play fa-5x" width='40px' height='40px'></i>
+                        </div>
+                        <div class='clickareaclose'></div>
+                        <div class="details details-close">
+                        
+                            <div class='details_inner'>
+                                
+                                <div class='upbtns'>
+                                    <div class='closeplayer'>
+                                        <img src="{% static 'base/icons/arrow.svg' %}" alt="">
+                                    </div>
+                                    <div class='actionbtn'>
+                                        <img src="{% static 'base/icons/dots.svg' %}" alt="">
+                                    </div>
+                                </div>
+                                <div class='details-inner-img-container'>
+                                <div><img class='music_thumnail_img' src="{% static 'base/icons/music.svg' %}" >
+                                </div>
+                                </div>
+                                <div class='track-info'>
+                                <div>
+                                <div class="track-name">Track Name</div>
+                                <div class="track-artist">Track Artist</div>
+                                </div>
+                                <div class='playerlikedbtn'>
+                                    <img src="{% static 'base/icons/heart.svg' %}" alt="">
+                                </div>
+
+                            </div>
+                            <div id='main_info'>
+                                <div class="buttons">
+                                    <div class="slider_container slider_container_time">
+                                        <div class="current-time">00:00</div>
+                                         <input type="range" min="1" max="100" value="0" class="seek_slider">
+                                        <div class="total-duration">00:00</div>
+                                    </div>
+                                    <div class='btns_container'>
+                                    <div class="random-track info_btn" >
+                                        <img src="{% static 'base/icons/shuffle.svg' %}" alt="">
+                                    </div>
+                                    <div class="prev-track info_btn" >
+                                        <img src="{% static 'base/icons/next.svg' %}" alt="">
+                                     </div>
+                                     <div class="playpause-track" >
+                                        <i class="fa fa-play-circle fa-5x" width='40px' height='40px'></i>
+                                     </div>
+                                     <div class="next-track info_btn" >
+                                        <img src="{% static 'base/icons/next.svg' %}" alt="">
+                                     </div>
+                                     <div class="repeat-track info_btn" >
+                                        <img src="{% static 'base/icons/repeat-one.svg' %}" alt="">
+                                     </div>
+                                    </div>
+                                </div>
+                                
+                                </div>
+                            </div>
+                            
+                        </div>
+
+
+
+                        
+
+
+             
+                        <div class="slider_container slider_container_volume">
+                            <i class="fa fa-volume-down" ></i>
+                             <input type="range" min="1" max="100" value="99" class="volume_slider" onchange="setVolume()">
+                        </div>  
+                    </div>
+                </div>
+            </div>
+            <div id='editbar' class='edit-bar-hidden'>
+                <div id='editbarcontainer'>
+                <div id='edit_container'>
+                <div id='edit_img'>
+                    <div>
+                        <img src="{% static 'base/as.jpg' %}" alt="">
+                    </div>
+                </div>
+                <div>
+                    <p>Name here</p>
+                </div>
+                </div>
+                <div id='editacts'>
+                    <div class='editactbtn' id='btn_addsongs'>
+                        <div class='editbtn_icon'>
+                            <img src="{% static 'base/icons/plus.svg' %}" alt="">
+                        </div>
+                        <div>
+                            <p>Add songs</p>
+                        </div>
+                    </div>
+                    <div class='editactbtn' id='btn_edit'>
+                        <div class='editbtn_icon'>
+                            <img src="{% static 'base/icons/pen.svg' %}" alt="">
+                        </div>
+                        <div>
+                            <p>Edit</p>
+                        </div>
+                    </div>
+                    <div class='editactbtn' id='btn_makeprivate'>
+                        <div class='editbtn_icon'>
+                            <img src="{% static 'base/icons/lock.svg' %}" alt="">
+                        </div>
+                        <div>
+                            <p>Make Private</p>
+                        </div>
+                    </div>
+                    <div class='editactbtn' id='btn_removefromprofile'>
+                        <div class='editbtn_icon'>
+                            <img src="{% static 'base/icons/profile.svg' %}" alt="">
+                        </div>
+                        <div>
+                            <p>Remove from Profile</p>
+                        </div>
+                    </div>
+                    <div class='editactbtn' id='btn_deleteplaylist'> 
+                        <div class='editbtn_icon'>
+                            <img src="{% static 'base/icons/minus.svg' %}" alt="">
+                        </div>
+                        <div>
+                            <p>Delete Playlist</p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div id='closebtn'>
+                    <p id='closebtnwd'>Close</p>
+                </div>
+            </div>
+            <div class='tapbar'>
+                <div class='links'>
+                    <div class='linkbtn' id='homelink'>
+                        <div class='link_img_container'>
+                            <img src="{% static 'base/icons/home.svg' %}" alt="">
+                        </div>
+                        <div class='link_text_container'>
+                            <p>Home</p>
+                        </div>
+                    </div>
+                    <div class='linkbtn' id='searchlink'>
+                        <div class='link_img_container'>
+                            <img src="{% static 'base/icons/search.svg' %}" alt="">
+                        </div>
+                        <div class='link_text_container'>
+                            <p>Search</p>
+                        </div>
+                    </div>
+                    <div class='linkbtn' id='yourlibrarylink'>
+                        <div class='link_img_container'>
+                            <img src="{% static 'base/icons/library.svg' %}" alt="">
+                        </div>
+                        <div class='link_text_container'>
+                            <p>My Library</p>
+                        </div>
+                    </div>
+                    <div class='linkbtn' id='addlink'>
+                        <div class='link_img_container'>
+                            <img src="{% static 'base/icons/plus.svg' %}" alt="">
+                        </div>
+                        <div class='link_text_container'>
+                            <p>Add</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div id='main_info701'>
+            <div class="buttons">
+                <div class="slider_container slider_container_time">
+                    <div class="current-time">00:00</div>
+                     <input type="range" min="1" max="100" value="0" class="seek_slider">
+                    <div class="total-duration">00:00</div>
+                </div>
+                <div class='btns_container'>
+                <div class="random-track info_btn" >
+                    <img src="{% static 'base/icons/shuffle.svg' %}" alt="">
+                </div>
+                <div class="prev-track info_btn" >
+                    <img src="{% static 'base/icons/next.svg' %}" alt="">
+                 </div>
+                 <div class="playpause-track" >
+                    <i class="fa fa-play-circle fa-5x" width='40px' height='40px'></i>
+                 </div>
+                 <div class="next-track info_btn" >
+                    <img src="{% static 'base/icons/next.svg' %}" alt="">
+                 </div>
+                 <div class="repeat-track info_btn" >
+                    <img src="{% static 'base/icons/repeat-one.svg' %}" alt="">
+                 </div>
+                </div>
+            </div>
+            
+            </div>
+        </div>
+        
+        <script src="{% static 'base/js/main.js' %}"></script>
+        <script src="{% static 'base/js/script.js' %}"></script>
+        <script src="" async defer></script>
+        
+    </body>
+</html>

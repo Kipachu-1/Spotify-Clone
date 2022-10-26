@@ -1,0 +1,34 @@
+{% extends 'base/login_page2.html' %}
+
+                {% block style %}
+                <style>
+                    .message {
+                        text-align: center;
+                        position: absolute;
+                        transform: translate(-50%, -50%);
+                        top: 25%;
+                        left: 50%;}
+                </style>
+                {% endblock %}
+
+            {% block form %}   
+            <form action="" method="POST" class="form login">
+                {% csrf_token %}
+                <div class="form__field">
+                    <label for="SigUp__username"><svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use></svg></label>
+                    <input id="SignUp__username" type="text" name="username" class="form__input" placeholder="Username" required>
+                </div>
+                <div class="form__field">
+                    <label for="SignUp__password"><svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#lock"></use></svg></label>
+                    <input id="SignUp__password" type="password" name="password1" class="form__input" placeholder="Password" required>
+                </div>
+                <div class="form__field">
+                    <label for="SignUp__password"><svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#lock"></use></svg></label>
+                    <input id="SignUp__password" type="password" name="password2" class="form__input" placeholder="Password" required>
+                </div>
+                <div class="form__field">
+                    <input type="submit" value="Sign Up">
+                </div>
+            </form>
+            <p class="text--center">Have an acccount? <a href="{% url 'login_page_default'%}">Sign In</a> </p>
+            {% endblock %} 
