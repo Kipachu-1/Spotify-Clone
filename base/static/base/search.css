@@ -53,8 +53,8 @@
     row-gap: 4px;
 }
 .song_list  .music_block .thumnail {
-    width: 54px;
-    height: 54px;
+    width: 48px;
+    height: 48px;
 }
 .music_info {
     display: flex;

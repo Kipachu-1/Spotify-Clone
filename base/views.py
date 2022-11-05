@@ -21,56 +21,24 @@ def home(request):
     
 @csrf_exempt
 def collection(request, playlist_id):
-    playlist_info = models.Playlist.objects.get(uni_id=playlist_id)
-    music_list = playlist_info.musics.all()
-    music_count = music_list.count()
-    context = {
-        'data': playlist_info,
-        'music_list': music_list,
-        'music_count' : music_count
-    }
-    if request.method == 'POST':
-        playlist = models.Playlist.objects.get(uni_id = playlist_id)
-        name = request.POST.get('name')
-        description = request.POST.get('descriptiontoplaylist')
-        try:
-            thumnail = request.FILES['thumnail']
-            playlist.thumnail = thumnail
-        except: 
-            pass
-        playlist.name = name
-        playlist.description = description
-        playlist.save()
-    if playlist_id == 'tracks':
-        return render(request, 'base/collectionL.html', context)
-    return render(request, 'base/collection.html', context)
+    return render(request, 'base/home.html')
 
 
 def library(request):
-    return render(request, 'base/library.html')
+    return render(request, 'base/home.html')
 
 
 def librarytracks(request):
-    playlist_info = models.LikedSongs.objects.get(user=request.user)
-    music_list = playlist_info.musics.all()
-    music_count = music_list.count()
-    context = {
-        'data': playlist_info,
-        'music_list': music_list,
-        'music_count' : music_count
-    }
-    return render(request, 'base/library.html', context)
+    return render(request, 'base/home.html')
 
 
 @login_required
 def track_page(request, music_id):
-    music = models.Music.objects.get(uni_id=music_id)
-    context = {'data' : music, 'type': 'SONG'}
-    return render(request, 'base/collection.html', context)
+    return render(request, 'base/home.html')
 
 @login_required
 def artist_page(request, artist_id):
-    return render(request, 'base/collection.html')
+    return render(request, 'base/home.html')
 
 
 @login_required
@@ -100,9 +68,8 @@ def create_playlist(request):
     uni_id = playlist_id()
     creator = models.User.objects.get(username=request.user.username)
     playlist_created = models.Playlist.objects.create(creator=creator, uni_id=uni_id)
-    playlist = models.Playlist.objects.get(uni_id=uni_id)
-    playlists_list.playlists.add(playlist)
-    return JsonResponse({'name':playlist.name, 'uni_id': uni_id, 'id': playlist.id}, safe=False)
+    playlists_list.playlists.add(playlist_created)
+    return JsonResponse({'name':playlist_created.name, 'uni_id': uni_id, 'id': playlist_created.id}, safe=False)
 
 
 
@@ -112,8 +79,7 @@ def create_playlist2(request, name):
     uni_id = playlist_id()
     creator = models.User.objects.get(username=request.user.username)
     playlist_created = models.Playlist.objects.create(name=name, creator=creator, uni_id=uni_id)
-    playlist = models.Playlist.objects.get(uni_id=uni_id)
-    playlists_list.playlists.add(playlist)
+    playlists_list.playlists.add(playlist_created)
     return JsonResponse({'success': 'yes'}, safe=False)
     
     
@@ -189,13 +155,13 @@ def FollowedArtistsInfo(request):
         })
     return JsonResponse(data, safe=False)
 
-
 def FollowedArtists_List(request):
     data = []
     artists = models.FollowedArtist.objects.get(user=request.user).artists.all()
     for i in artists:
         data.append(i.uni_id)
     return JsonResponse(data, safe=False)
+
 
 def updateFollowedArtists_list(request, action, artist_id):
     artists = models.FollowedArtist.objects.get(user=request.user).artists
@@ -206,7 +172,7 @@ def updateFollowedArtists_list(request, action, artist_id):
         artists.add(artist)
     return JsonResponse({'result':'Action completed'}, safe=False)
    
-@login_required
+
 def get_playlists(request):
     data = []
     playlists = models.User_Playlists.objects.get(user=request.user).playlists.all()
@@ -221,14 +187,25 @@ def get_playlists(request):
         })
     return JsonResponse(data, safe=False)
    
-   
+
+def RecPlaylists(request):
+    data = []
+    playlists = models.Playlist.objects.all()[:10]
+    for i in playlists:
+        data.append({
+            'name' : i.name,
+            'id': i.uni_id,
+            'thumnail': i.thumnail.url,
+            'creator': i.creator.username,
+        })
+    return JsonResponse(data, safe=False)   
    
        
 @login_required        
 def get_home_content(request):
     data = []
     recently_played = models.Recently_played_playlists.objects.filter(user=request.user)
-    playlists = models.User_Playlists.objects.get(user=request.user).playlists.all()
+    playlists = models.Playlist.objects.all().order_by('-created')[:10]
     for i in playlists:
             data.append({'name' : i.name,
                         'id': i.uni_id,
@@ -240,10 +217,9 @@ def get_home_content(request):
 def get_music_info(request, music_id):
     likedsongs = models.LikedSongs.objects.get(user=request.user).musics.all()
     music = models.Music.objects.get(uni_id= music_id)
-    liked = 'yes' if music in likedsongs else 'no'
     return JsonResponse([{'music' : music.music.url, 'thumnail' : music.thumnail.url,
                           'name' : music.name, 'artist': music.author.name, 'type': 'song',
-                          'id' : music.uni_id, 'authorava': music.author.avatar.url, 'liked':liked, 'artist_id':music.author.uni_id}], safe=False)
+                          'id' : music.uni_id, 'authorava': music.author.avatar.url, 'artist_id':music.author.uni_id}], safe=False)
 
     
 @login_required
@@ -256,19 +232,15 @@ def search(request, question):
     context = {'songs': songs, 
                'artists': artists,
                'playlists': playlists}
-    return render(request, 'base/Search.html', context)
+    return render(request, 'base/home.html', context)
 
 
 @login_required
 def rawsearch(request):
-    playlists = models.User_Playlists.objects.get(user=request.user).playlists.all()
-    context = {
-        'playlists': playlists[:6]
-    }
-    return render(request, 'base/Search.html', context)
+    return render(request, 'base/home.html')
 
 @login_required
-def tolikedsongs(request, track_id, action):
+def UpdateLikedSongs(request, track_id, action):
     Likedsongs = models.LikedSongs.objects.get(user=request.user)
     track = models.Music.objects.get(uni_id=track_id)
     if action == 'add':
@@ -313,15 +285,13 @@ def betasearch(request, question=""):
     
     return JsonResponse(get_data, safe=False)
 
-    
-    
 
 def delete_playlist(request, playlist_id):
     models.Playlist.objects.get(uni_id= playlist_id).delete()
     return JsonResponse({'success?': 'yes'}, safe=False)
     
     
-def add_song_to_playlist(request, track_id, playlist_id, action):
+def UpdatePlaylistList(request, track_id, playlist_id, action):
     track = models.Music.objects.get(uni_id=track_id)
     playlist = models.Playlist.objects.get(uni_id=playlist_id)
     if action =='add':
@@ -331,7 +301,7 @@ def add_song_to_playlist(request, track_id, playlist_id, action):
     return JsonResponse({'success?': 'yes'}, safe=False)
     
     
-def playlist_to_library(request, action, playlist_id):
+def UpdateLibrary(request, action, playlist_id):
     playlist = models.Playlist.objects.get(uni_id=playlist_id)
     library = models.User_Playlists.objects.get(user=request.user)
     if action == 'add':
@@ -341,8 +311,6 @@ def playlist_to_library(request, action, playlist_id):
     return JsonResponse({'success?': 'yes'}, safe=False)
     
     
-
-
 def history_update(request, type, id):
     if type == 'track':
         history = models.history.objects.filter(user=request.user)
@@ -361,8 +329,7 @@ def history_get(request):
     except:
         return JsonResponse({'last_track' : 'no'}, safe=False)
     
-def changeprivacy(requestm, playlist_id, privacytype):
-
+def ChangePlaylistPrivacy(requestm, playlist_id, privacytype):
     playlist = models.Playlist.objects.get(uni_id=playlist_id)
     if privacytype == 'public':
         playlist.public = True

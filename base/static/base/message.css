@@ -1,7 +1,6 @@
 .message-container {
     position: fixed;
     width: fit-content;
-    bottom: 110px;
     display: flex;
     justify-self: center;
     align-self: center;

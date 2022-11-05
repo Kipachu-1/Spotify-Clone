@@ -325,6 +325,7 @@ window.onload = function(){
         clear_view_content();
         collection_content(location.substring(location.lastIndexOf('/') +1), 'Track'); 
     } else if (location.includes('/search/')) {
+        window.history.replaceState({}, '', `http://${host_address}/search/`);
         searchpage();
         AcivateSearch();
     } else if (location.includes('/artist/')) {
@@ -460,7 +461,7 @@ async function home_content() {
 }
 
 async function other_block_content_home(section){
-    let playlists = await fetch(`/get/playlists/info`);
+    let playlists = await fetch(`/get/RecPlaylists/info`);
     let data = await playlists.json();
     let container_block = document.createElement('div');
     let block_name = document.createElement('div');
@@ -1580,14 +1581,13 @@ async function search_result(data, type){
 
 let type = 'songs'
 function AcivateSearch() {
+    var idleTime = 0;
     let types = document.querySelectorAll('.type-btn');
     searchinput.addEventListener('keyup', async function(){
         window.history.replaceState({}, '', `http://${host_address}/search/${this.value}`);
+        idleTime = 0;
         if(this.value != "") {
-        sleep(500).then(()=>{
-            
-        })
-        var get_data = await (await fetch(`/betasearch/${this.value}`)).json();
+            var get_data = await (await fetch(`/betasearch/${this.value}`)).json();
         }
         search_result(get_data, type);
         types[0].addEventListener('click', ()=> {
@@ -2180,7 +2180,7 @@ async function open_edit_details(data) {
     savebtn.addEventListener('click', ()=> {
         form.submit();
         clear_view_content();
-        collection_content(location.substring(location.lastIndexOf('/') +1), 'Track');
+        collection_content(location.substring(location.lastIndexOf('/') +1), 'Playlist');
         return false;
 })
 
@@ -2246,17 +2246,17 @@ function actionmessage(message){
     message_text.classList.add('message-text');
     message_text.innerText = message;
     message_container.appendChild(message_text);
-    message_container.style.bottom = '116px';
+    message_container.style.bottom = '110px';
     message_container.style.opacity='0';
     main.appendChild(message_container);
     sleep(100).then(()=>{
-        message_container.style.bottom='110px';
+        message_container.style.bottom='104px';
         message_container.style.opacity='1';
 
     })
     sleep(1800).then(()=>{
         message_container.style.opacity='0';
-        message_container.style.bottom = '104px';
+        message_container.style.bottom = '94px';
     })
     sleep(2000).then(()=>{
         message_container.remove();
