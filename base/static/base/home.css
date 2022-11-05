@@ -36,13 +36,15 @@ h1 {
     margin: 0;
 }
 #main {
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     width: 100%;
-    position: fixed;
+    position: absolute;
     top: 0;
 }
+
 #submain {
     display: flex;
     flex-direction: column;
@@ -64,8 +66,8 @@ h1 {
     column-gap: 10px;
 }
 #nav_bar {
-    width: 210px;
-    min-width: 210px;
+    width: 200px;
+    min-width: 200px;
     background-color: black;
     border-radius: 10px;
     display: flex;
@@ -126,14 +128,19 @@ h1 {
 }
 
 #playlist_list {
+    overflow-y: auto;
+    height: 55vh;
     padding-top: 14px;
     border-top: 1px solid rgb(255, 168, 255);
     display: flex;
     flex-direction: column;
 }
+#playlist_list::-webkit-scrollbar{
+    display: none;
+}
 .act_btn_name, .playlist_name {
     margin: auto 0;
-    font-size: 18px;
+    font-size: 14px;
     transition: 0.1s;
     color: white;
 }
@@ -214,12 +221,15 @@ h1 {
     cursor: pointer;
     position: relative;
     display: grid;
-    background-color: rgb(70, 70, 70);
+    background-color: rgba(70, 70, 70, 0.345);
     border-radius: 5px;
     display: flex;
     flex-direction: row;
     padding-bottom: 10px;
-
+    transition: 0.3s;
+}
+.name_playlist_block:hover {
+    background-color: rgba(129, 129, 129, 0.345);
 }
 #recently_played_playlists > .name_playlist_block {
     padding-bottom: 0;
@@ -232,7 +242,6 @@ h1 {
 }
 .playlist_name {
     justify-content: center;
-    font-size: 1rem;
 }
 .block_info {
     width: 84%;
@@ -278,6 +287,7 @@ h1 {
 
 .playbtn_block > i.fa-play-circle {
     font-size: 50px;
+    color: #8758FF;
 }
 
 
@@ -296,6 +306,7 @@ h1 {
     opacity: 0;
     transition: all 0.2s;
 }
+
 .name_playlist_block:hover .other_block_btn {
     visibility: visible;
     opacity: 1;
@@ -386,8 +397,42 @@ h1 {
     aspect-ratio: 1/1;
 }
 
+.history-navigation {
+    display: flex;
+    flex-direction: row;
+    column-gap:30px;
+    margin-right: 20px;
+}
 
-
+@media only screen and (max-width: 700px) {
+    .history-navigation {
+        display: none;
+    }
+}
+.go-btn {
+    position: relative;
+    height: 100%;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.go-btn img {
+    filter: invert(100%) sepia(100%) saturate(1%) hue-rotate(305deg) brightness(103%) contrast(101%);
+}
+.btn-container {
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.409);
+}
+#go-back {
+    transform: rotate(270deg);
+}
+#go-forward {
+    transform: rotate(90deg);
+}
 .hidden-nav-bar {
     left: -300%;
 }
@@ -492,12 +537,12 @@ h1 {
         padding: 0 10px;
         width: 100%;
         overflow-y: auto;
-        grid-template-columns: repeat(6, 180px);
+        grid-template-columns: repeat(6, 140px);
         column-gap: 0;
     }
     #view_container_content {
         border-radius: 0;
-        height: 100vh;
+        height: 100%;
         overflow-x: hidden;
     }
     .section_block_other::-webkit-scrollbar {
@@ -530,3 +575,7 @@ h1 {
 
     
     }
+
+
+
+

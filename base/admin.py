@@ -10,4 +10,5 @@ admin.site.register(models.Author)
 admin.site.register(models.Album)
 admin.site.register(models.Recently_played_playlists)
 admin.site.register(models.history)
+admin.site.register(models.FollowedArtist)
 

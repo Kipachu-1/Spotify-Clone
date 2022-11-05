@@ -16,18 +16,28 @@
     justify-content: space-between;
 }
 .details{
+    z-index: 100;
     position: relative;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     min-width: 200px;
-    transition: linear 0.15s;
+    transition: linear 0.1s;
 }
 .track-name{
+    cursor: pointer;
     font-size: 16px;
 }
+.track-name:hover {
+    text-decoration-line: underline;
+    
+}
+.track-artist:hover {
+    text-decoration-line: underline;
+}
 .track-artist{
+    cursor: pointer;
     margin-top: 5px;
     font-size: 14px;
 }
@@ -118,6 +128,10 @@ i.fa-step-backward{
     font-size: 40px;
     color: white;
 }
+.other_block_btn i {
+    color: #8758FF;
+    font-size: 50px;
+}
 .randomActive{
     color: black;
 }
@@ -206,20 +220,15 @@ i.fa-step-backward{
 .details_inner {
     height: 98%;
     transition: 1s;
-    z-index: 90;
     display: inherit;
     width: 94%;
     margin: auto auto;
-    border-radius: 10px;
+    border-radius: 5px;
     background-color: #8758FF;  
 
 
 }
-.music_thumnail_img {
-    margin-top: 2px ;
-    filter: invert(73%) sepia(59%) saturate(5011%) hue-rotate(232deg) brightness(101%) contrast(101%);
-    margin-left: 10px;
-}
+
 
 .track-info  {
     display: flex;
@@ -235,14 +244,28 @@ i.fa-step-backward{
     filter: invert(100%) sepia(100%) saturate(1%) hue-rotate(305deg) brightness(103%) contrast(101%);
     display: none;
 }
+@media only screen and (min-width: 700px) { 
+    .playerlikedbtn {
+        width: 20px;
+        position: absolute;
+        right: -40px;
+        filter: invert(100%) sepia(100%) saturate(1%) hue-rotate(305deg) brightness(103%) contrast(101%);
+        display: block;
+    }
+}
+
 @media only screen and (max-width: 700px) {
-    .seek_slider {
-        min-width: 100%;
+    .playerlikedbtn {
+        display: none;
     }
     .player {
         width: 100%;
     }
-
+    @media only screen and (max-device-width: 700px) {
+        .seek_slider {
+            min-width: 100%;
+        }
+    }
     
 
 }
@@ -262,9 +285,10 @@ i.fa-step-backward{
         margin-left: 0px;
     }
     .music_thumnail_img {
-        width: 50px;
-        height: 50px;
-        margin-left:0;
+        width: 46px;
+        height: 46px;
+        position: fixed;
+        transition: linear 0.1s;
     }
     .playpause-track > i {
         font-size: 70px;
@@ -288,7 +312,6 @@ i.fa-step-backward{
     color: white;
 }
     .details {
-        z-index: 100;
         position: fixed;
         bottom: 50px;
         width: 100%;
@@ -300,7 +323,13 @@ i.fa-step-backward{
 
     }
     .current-time, .total-duration {
-        display: none;
+        color: white;
+    }
+    .current-time {
+        transform: translate(70%, -50%);
+    } 
+    .total-duration {
+        transform: translate(-70%, -50%);
     }
     .slider_container_time {
         width: 90%;
@@ -319,41 +348,37 @@ img {
     bottom: 0;
 }
 .details-close {
-    height: 54px;
+    height: 50px;
 }
 
 .details-inner-open {
     flex-direction: column;
 }
 .music_thumnail_img_open {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     max-width: 330px;
     max-height: 360px;
-    aspect-ratio: 1/1;
     padding-bottom: 30px;
-    margin-left: 0;
 }
 
 .details-inner-img-container  {
     display: flex;
     justify-content: center;
     justify-items: center;
-    width: fit-content;
-    height: 40%;
-    aspect-ratio: 1/1;
     min-width: 70px;
-    padding-bottom: 20px;
-
 }
 
 .details-inner-img-container > div {
-    width: 86%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    position: relative;
 }
 .details-inner-img-container-open {
     width: 100%;
+    max-height: 360px;
+    aspect-ratio: 1/1;
 }
 
 .upbtns {
@@ -411,8 +436,8 @@ img {
     opacity: 1;
 }
 .clickareaclose {
-    position: fixed;
-    bottom: 50px;
+    position: absolute;
+    bottom: 30px;
     width: 100%;
     height: 50px;
     z-index: 110;
@@ -423,8 +448,6 @@ img {
     right: 20px;
     top: 14px;
 }
-
-
 @media only screen and (min-device-width: 700px) {
     .details {
         height: 78px;
@@ -445,15 +468,21 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 12px;
+    top: 16px;
     right: 28px;
     z-index: 120;
 }
 .play-pause-btn i {
-    font-size: 24px;
+    font-size: 20px;
 
 }
 @media only screen and (min-width: 700px) {
+    .details {
+        min-width: 250px;
+    }
+    .clickareaclose {
+        display: none;
+    }
     .buttons {
         position: absolute;
     }
