@@ -72,5 +72,6 @@
     }
     .container_block_collection {
         padding-top: 0;
+        padding-bottom: 150px;
     }
 }

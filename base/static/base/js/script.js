@@ -38,9 +38,18 @@ let actionbtn = document.querySelector('.actionbtn');
 let home_page_link = document.querySelector('.home_page_link');
 let go_back = document.getElementById('go-back');
 let go_forward = document.getElementById('go-forward');
-
 let host_address = window.location.host;
-
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+    if(innerWidth<700)
+    {var go_back_mobile = document.createElement('div');
+    go_back_mobile.innerHTML = '<img src="/static/base/icons/arrow.svg" alt>';
+    go_back_mobile.classList.add('go-btn');
+    go_back_mobile.setAttribute('id', 'go_back_mobile');
+    go_back_mobile.style = 'position:absolute;left:10px; top:20px;transform:rotate(270deg); width:20px; height:20px;'
+    go_back_mobile.addEventListener('click', ()=>{
+        history.back();
+    })}
+}
 async function FollowedArtists()
 {
     if(!aStorage.getItem('Artist_list'))
@@ -150,7 +159,10 @@ function addtoplaylist_list(data){
     let new_playlist_block = document.createElement('div');
     new_playlist_block.classList.add('playlist_block');
     new_playlist_block.dataset.id = data['id'];
-    new_playlist_block.innerHTML = `<div class='subblock'><h1 class='playlist_name'>${data['name']}</h1></div>`;
+    if(data['name'].length > 20) {
+        new_playlist_block.innerHTML = `<div class='subblock'><h1 class='playlist_name'>${data['name'].substring(0, 20)}...</h1></div>`;
+    } else {
+    new_playlist_block.innerHTML = `<div class='subblock'><h1 class='playlist_name'>${data['name']}</h1></div>`;}
     playlist_list.appendChild(new_playlist_block);
     new_playlist_block.addEventListener('click', async function(){
         if(!window.location.href.includes(data['id']))
@@ -180,7 +192,7 @@ function emptyspace(){
 }
 
 
-function homepack(){
+async function homepack(){
     window.history.pushState({}, '', `http://${host_address}`);
     clear_view_content();
     home_content();
@@ -189,15 +201,12 @@ function homepack(){
 }
 homelink.addEventListener('click',()=> {
     if(window.location.pathname != '/')
-    {homepack();
-    sleep(1000).then(emptyspace);}
+    {homepack().then(emptyspace);}
 })
 
 home_page_link.addEventListener('click',()=>{
     if(window.location.pathname != '/')
-    {
-    homepack();
-    sleep(1000).then(emptyspace);}
+    {homepack().then(emptyspace);}
 })
 
 // if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
@@ -210,8 +219,9 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Phone|Kindle
         player_wrapper.appendChild(slider_container_volume);
     main_info_btns.classList.add('main-info-hidden');
     clickareaclose.addEventListener('click', ()=>{
-        if(window.innerWidth < 700)
-        {show_mus();}
+        if(innerWidth < 700)
+        {show_mus();
+        }
     });
     closeplayer.addEventListener('click', ()=> {
         hide_mus();
@@ -304,7 +314,6 @@ async function Playlist_list() {
     }
 }
 Playlist_list();
-
 
 
 
@@ -535,9 +544,11 @@ async function collection_likedsongs() {
     playlist_info_type.innerText = 'PLAYLIST';
     playlist_info_name.innerText = "Liked Songs";
     playlist_author_length.innerText = `${data['playlist_info']['creator']}*${data['music_count']} songs`
-
     playbtn.classList.add('act_btn_playlist');
 
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)){
+    if(innerWidth<700)
+        {playlist_info.appendChild(go_back_mobile);}}
     playlist_author_length.setAttribute('id', 'playlist_author_length');
     playlist_info_type.setAttribute('id', 'playlist_info_type');
     playlist_info_name.setAttribute('id', 'playlist_info_name');
@@ -716,6 +727,7 @@ async function collection_content(uni_id, type) {
     let musics_list = document.createElement('div');
 
 
+
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
         editbtn.addEventListener('click', function() {
             editbar.classList.add('edit-bar-show');
@@ -726,6 +738,8 @@ async function collection_content(uni_id, type) {
                 actioncontent(uni_id, 'Playlist', data)
             }
         })
+        if(innerWidth<700)
+        {playlist_info.appendChild(go_back_mobile);}
 
     } else {
         editbtn.addEventListener('click', function() {
@@ -781,6 +795,10 @@ async function collection_content(uni_id, type) {
     editbtn_img.setAttribute('src', '/static/base/icons/dots.svg');
     likedbtn_img.setAttribute('src', '/static/base/icons/heart.svg');
 
+    if(playlist_info_name.innerText.length > 15) {
+        if(innerWidth> 700)
+        {playlist_info_name.style.fontSize = '44px'}
+    }
     if (type == 'Track') {
     playlist_img_img.setAttribute('src', data[0]['thumnail']);
     if (checkTrack(data[0]['id'])) {
@@ -1044,6 +1062,9 @@ async function artist_content(uni_id) {
     let followbtn = document.createElement('div');
     let editbtn = document.createElement('div');
     let musics_list = document.createElement('div');
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)){
+        if(innerWidth<700)
+            {playlist_info.appendChild(go_back_mobile);}}
     
     playlist_info_block.style = "display:flex;align-items:center;";
 
@@ -1320,7 +1341,8 @@ async function musicblockactioncontent(data, playlist_id, ownership) {
     btn_addtoplaylist.setAttribute('id', 'btn_addtoplaylist');
     btn_removefromplaylist.classList.add('editactbtn');
     btn_removefromplaylist.setAttribute('id', 'btn_removefromplaylist');
-    editacts.appendChild(btn_like);
+    if(!window.location.href.includes('/collection/tracks'))
+    {editacts.appendChild(btn_like);}
     editacts.appendChild(btn_addtoplaylist);
     if(ownership == 'mine')
     {editacts.appendChild(btn_removefromplaylist);}
@@ -1792,6 +1814,7 @@ async function actioncontent(uni_id, type, data_info) {
         editbar.classList.remove('edit-bar-show');
         editbar.classList.add('edit-bar-hidden');
         window.history.replaceState({}, '', `http://${host_address}/collection/playlists`);
+        playlist_list.querySelector(`[data-id="${data['id']}"]`).remove();
         clear_view_content();
         LibararyPage()
         other_block_content('Playlists');;
@@ -1828,7 +1851,7 @@ async function actioncontent(uni_id, type, data_info) {
         let btn_like = document.createElement('div');
         let btn_addtoplaylist = document.createElement('div');
 
-        if(likedbtn.dataset.liked == 'true') {
+        if(checkTrack(data['id'])) {
             btn_like.innerHTML = "<div class='editbtn_icon'><img src='/static/base/icons/heart.svg' alt=''></div><div><p>Liked</p></div>";
         } else {
             btn_like.innerHTML = "<div class='editbtn_icon'><img src='/static/base/icons/heart.svg' alt=''></div><div><p>Like</p></div>";
@@ -2144,7 +2167,7 @@ async function open_edit_details(data) {
     img_container_pop.innerHTML = `<img src="${data['thumnail']}" alt="" id="img_place"><input type="file" class="file-input" name="thumnail" accept="image/.jpg, image/.jpeg, image/.png" id="image_upload">`
     let playlist_edit_inputs = document.createElement('div');
     playlist_edit_inputs.classList.add('playlist-edit-inputs');
-    playlist_edit_inputs.innerHTML = `<div class="playlist-edit-name-input"><input type="text" placeholder="Name here" autocomplete="none" name="name" id="input_name"></div><div class="playlist-edit-description-input"><textarea name="descriptiontoplaylist" id="" cols="30" rows="10" placeholder="Add an optional description.." name="description">${data['description']}</textarea></div>`
+    playlist_edit_inputs.innerHTML = `<div class="playlist-edit-name-input"><input type="text" placeholder="Name here" autocomplete="none" name="name" id="input_name" maxlength="30"></div><div class="playlist-edit-description-input"><textarea name="descriptiontoplaylist" id="" cols="30" rows="10" placeholder="Add an optional description.." name="description">${data['description']}</textarea></div>`
 
 
     pop_up_middle.appendChild(img_container_pop);

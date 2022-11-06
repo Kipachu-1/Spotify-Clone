@@ -13,30 +13,42 @@ from django.contrib.auth.models import User
 @csrf_exempt
 @login_required(login_url='login/')
 def home(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        description = request.POST.get('description')
-        thumnail = request.FILES['thumnail']
     return render(request, 'base/home.html')
     
 @csrf_exempt
+@login_required(login_url='login/')
 def collection(request, playlist_id):
+    if request.method == 'POST':
+        playlist = models.Playlist.objects.get(uni_id = playlist_id)
+        name = request.POST.get('name')
+        description = request.POST.get('descriptiontoplaylist')
+        try:
+            thumnail = request.FILES['thumnail']
+            playlist.thumnail = thumnail
+        except: 
+            pass
+        playlist.name = name[:30]
+        playlist.description = description[:200]
+        playlist.save()
     return render(request, 'base/home.html')
 
-
+@login_required(login_url='login/')
 def library(request):
     return render(request, 'base/home.html')
 
 
+@login_required(login_url='login/')
 def librarytracks(request):
     return render(request, 'base/home.html')
 
 
-@login_required
+
+@login_required(login_url='login/')
 def track_page(request, music_id):
     return render(request, 'base/home.html')
 
-@login_required
+
+@login_required(login_url='login/')
 def artist_page(request, artist_id):
     return render(request, 'base/home.html')
 

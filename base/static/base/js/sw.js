@@ -14,17 +14,6 @@ if (navigator.serviceWorker) {
   }
 
 
-// var cacheName = 'offline';
-self.addEventListener('install', event =>{
-    event.waitUntil(
-        caches.open('Data').then((cache) =>{
-            fetch('/likedsongs/get/info').then((response)=>{
-                return cache.put('/likedsongs/get/info', response);
-            })
-        })
-    )
-})
-
 
 
   

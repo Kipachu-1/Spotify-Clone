@@ -410,6 +410,7 @@ h1 {
     }
 }
 .go-btn {
+    transition: 0.2s;
     position: relative;
     height: 100%;
     width: 20px;
