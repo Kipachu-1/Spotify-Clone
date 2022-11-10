@@ -18,9 +18,5 @@ window.addEventListener('orientationchange', function () {
         cover.remove();
     }
     
-
-    // if (window.orientation == 0) {
-    //     this.alert('norm');
-    // }
 }, true);
 }
