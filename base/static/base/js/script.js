@@ -39,6 +39,12 @@ let home_page_link = document.querySelector('.home_page_link');
 let go_back = document.getElementById('go-back');
 let go_forward = document.getElementById('go-forward');
 let host_address = window.location.host;
+
+
+
+
+
+
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
     if(innerWidth<700)
     {var go_back_mobile = document.createElement('div');
@@ -50,80 +56,6 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Phone|Kindle
         history.back();
     })}
 }
-async function FollowedArtists()
-{
-    if(!aStorage.getItem('Artist_list'))
-    {let Artist_list = await (await fetch(`http://${host_address}/artists/get/list`)).json();
-    aStorage.setItem('Artist_list', JSON.stringify(Artist_list));}
-}
-FollowedArtists();
-
-
-async function LikedSongs()
-{
-    if(!aStorage.getItem('LikedSongs'))
-    {let LikedSongs = await (await fetch(`http://${host_address}/likedsongs/get/tracklist`)).json();
-    aStorage.setItem('LikedSongs', JSON.stringify(LikedSongs));}
-}
-LikedSongs();
-
-
-function checkTrack(id){
-    if(JSON.parse(aStorage.getItem('LikedSongs')).includes(id)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-async function updateLikedSongs(id, action){
-    let list = aStorage.getItem('LikedSongs');
-    let updated_list = JSON.parse(list);
-    if(action == 'remove'){
-        updated_list.splice(updated_list.indexOf(id), 1);
-        await fetch(`http://${host_address}/likedsongs/remove/track/${id}`);
-        actionmessage('Removed from Liked Songs');
-    } else {
-        if(!updated_list.includes(id)){updated_list.push(id);}
-        await fetch(`http://${host_address}/likedsongs/add/track/${id}`);
-        actionmessage('Added to Liked Songs');
-
-    }
-    aStorage.setItem('LikedSongs', JSON.stringify(updated_list));
-    
-}
-
-function checkArtist(id){
-    if(JSON.parse(aStorage.getItem('Artist_list')).includes(id)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-async function updateArtistList(id, action){
-    let list = aStorage.getItem('Artist_list');
-    let updated_list = JSON.parse(list);
-    if(action == 'remove'){
-        updated_list.splice(updated_list.indexOf(id), 1);
-        await fetch(`http://${host_address}/artists/remove/artist/${id}`);
-        actionmessage('Removed from Your Library');
-    } else {
-        if(!updated_list.includes(id)){updated_list.push(id);}
-        await fetch(`http://${host_address}/artists/add/artist/${id}`);
-        actionmessage('Added to Your Library');
-
-    }
-    aStorage.setItem('Artist_list', JSON.stringify(updated_list));
-}
-
-
-
-
-
-
-
-
 go_back.addEventListener('click', ()=>{
     history.back();
 })
@@ -154,26 +86,6 @@ playlist_add.addEventListener('click', async function(){
     })
 })
 
-
-function addtoplaylist_list(data){
-    let new_playlist_block = document.createElement('div');
-    new_playlist_block.classList.add('playlist_block');
-    new_playlist_block.dataset.id = data['id'];
-    if(data['name'].length > 20) {
-        new_playlist_block.innerHTML = `<div class='subblock'><h1 class='playlist_name'>${data['name'].substring(0, 20)}...</h1></div>`;
-    } else {
-    new_playlist_block.innerHTML = `<div class='subblock'><h1 class='playlist_name'>${data['name']}</h1></div>`;}
-    playlist_list.appendChild(new_playlist_block);
-    new_playlist_block.addEventListener('click', async function(){
-        if(!window.location.href.includes(data['id']))
-        {window.history.pushState({}, '', `http://${host_address}/playlist/${data['id']}`);
-        clear_view_content();
-        collection_content(data['id'], 'Playlist');}
-    })
-}
-
-
-
 window.addEventListener("touchstart", touchHandler, false);
 function touchHandler(event){
     if(event.touches.length > 1){
@@ -183,15 +95,17 @@ function touchHandler(event){
 
 function emptyspace(){
     if(innerWidth < 700)
-    {let space = document.createElement('div')
+    {
+    let space = document.createElement('div')
     space.style.width = "100%";
     space.style.minHeight = '200px';
     space.style.position ='relative';
     space.classList.add('space');
-    view_container_content.appendChild(space);}
+    if(view_container_content.childElementCount == 3) {
+    view_container_content.appendChild(space);
 }
-
-
+}
+}
 async function homepack(){
     window.history.pushState({}, '', `http://${host_address}`);
     clear_view_content();
@@ -201,16 +115,13 @@ async function homepack(){
 }
 homelink.addEventListener('click',()=> {
     if(window.location.pathname != '/')
-    {homepack().then(emptyspace);}
+    {homepack()}
 })
 
 home_page_link.addEventListener('click',()=>{
     if(window.location.pathname != '/')
-    {homepack().then(emptyspace);}
+    {homepack()}
 })
-
-// if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
-
 
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
     navbar.classList.add('hidden-nav-bar');
@@ -273,9 +184,6 @@ searchlink.addEventListener('click', function(){
  }
 })
 
-// screen.orientation.lock("portrait");
-// screen.lockOrientation("orientation");
-
 
 library_btn.addEventListener('click', async function(){
     if(!window.location.href.includes('/collection/playlists'))
@@ -306,20 +214,67 @@ document.querySelectorAll('.playbtn_block').forEach(item => {
     })
 });
 
+// ==================================Local Storage================================
 
-async function Playlist_list() {
-    let playlists = await (await fetch(`http://${host_address}/get/playlists/info`)).json();
-    for(let i = 0; i < playlists.length; i++){
-        addtoplaylist_list(playlists[i]);
+async function FollowedArtists()
+{
+    if(!aStorage.getItem('Artist_list'))
+    {let Artist_list = await (await fetch(`http://${host_address}/artists/get/list`)).json();
+    aStorage.setItem('Artist_list', JSON.stringify(Artist_list));}
+}
+FollowedArtists();
+async function LikedSongs()
+{
+    if(!aStorage.getItem('LikedSongs'))
+    {let LikedSongs = await (await fetch(`http://${host_address}/likedsongs/get/tracklist`)).json();
+    aStorage.setItem('LikedSongs', JSON.stringify(LikedSongs));}
+}
+LikedSongs();
+function checkTrack(id){
+    if(JSON.parse(aStorage.getItem('LikedSongs')).includes(id)) {
+        return true;
+    } else {
+        return false;
     }
 }
-Playlist_list();
+async function updateLikedSongs(id, action){
+    let list = aStorage.getItem('LikedSongs');
+    let updated_list = JSON.parse(list);
+    if(action == 'remove'){
+        updated_list.splice(updated_list.indexOf(id), 1);
+        await fetch(`http://${host_address}/likedsongs/remove/track/${id}`);
+        actionmessage('Removed from Liked Songs');
+    } else {
+        if(!updated_list.includes(id)){updated_list.push(id);}
+        await fetch(`http://${host_address}/likedsongs/add/track/${id}`);
+        actionmessage('Added to Liked Songs');
 
+    }
+    aStorage.setItem('LikedSongs', JSON.stringify(updated_list));
+    
+}
+function checkArtist(id){
+    if(JSON.parse(aStorage.getItem('Artist_list')).includes(id)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+async function updateArtistList(id, action){
+    let list = aStorage.getItem('Artist_list');
+    let updated_list = JSON.parse(list);
+    if(action == 'remove'){
+        updated_list.splice(updated_list.indexOf(id), 1);
+        await fetch(`http://${host_address}/artists/remove/artist/${id}`);
+        actionmessage('Removed from Your Library');
+    } else {
+        if(!updated_list.includes(id)){updated_list.push(id);}
+        await fetch(`http://${host_address}/artists/add/artist/${id}`);
+        actionmessage('Added to Your Library');
 
-
-
-
-
+    }
+    aStorage.setItem('Artist_list', JSON.stringify(updated_list));
+}
 // ================================Navigation pages===============================
 
 window.onload = function(){
@@ -397,18 +352,39 @@ actionbtn.addEventListener('click', ()=>{
 
 })
 
-
 // =====================================Functions ==================================
 
-
+function addtoplaylist_list(data){
+    let new_playlist_block = document.createElement('div');
+    new_playlist_block.classList.add('playlist_block');
+    new_playlist_block.dataset.id = data['id'];
+    if(data['name'].length > 20) {
+        new_playlist_block.innerHTML = `<div class='subblock'><h1 class='playlist_name'>${data['name'].substring(0, 20)}...</h1></div>`;
+    } else {
+    new_playlist_block.innerHTML = `<div class='subblock'><h1 class='playlist_name'>${data['name']}</h1></div>`;}
+    playlist_list.appendChild(new_playlist_block);
+    new_playlist_block.addEventListener('click', async function(){
+        if(!window.location.href.includes(data['id']))
+        {window.history.pushState({}, '', `http://${host_address}/playlist/${data['id']}`);
+        clear_view_content();
+        collection_content(data['id'], 'Playlist');}
+    })
+}
 function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
-  function clear_view_content(){
+function clear_view_content(){
     view_container_content.innerHTML = '';
 }
+async function Playlist_list() {
+    let playlists = await (await fetch(`http://${host_address}/get/playlists/info`)).json();
+    for(let i = 0; i < playlists.length; i++){
+        addtoplaylist_list(playlists[i]);
+    }
+}
+Playlist_list();
 
-// =============================page functions ======================================
+// =============================PAGE FUNCTIONS ======================================
 
 async function home_content() {
     try {
@@ -467,6 +443,7 @@ async function home_content() {
             playTrack();
     });
     }
+    emptyspace()
 }
 
 async function other_block_content_home(section){
@@ -522,6 +499,7 @@ async function other_block_content_home(section){
         });
     view_container_content.appendChild(container_block);
 }
+emptyspace();
 }
 
 async function collection_likedsongs() {
@@ -2200,11 +2178,11 @@ async function open_edit_details(data) {
     cancel_btn.addEventListener('click', ()=> {
         ReactModalPortal.remove();
     })
-    savebtn.addEventListener('click', ()=> {
+
+    savebtn.addEventListener('click', (e)=> {
         form.submit();
         clear_view_content();
         collection_content(location.substring(location.lastIndexOf('/') +1), 'Playlist');
-        return false;
 })
 
 }
